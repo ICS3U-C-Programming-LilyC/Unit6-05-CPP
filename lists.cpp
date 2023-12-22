@@ -7,7 +7,9 @@
 // Then it will calculate / display their average.
 
 // Using C++ libraries to allow for input/outputs,
-// using lists, strings and handling exceptions.
+// using lists, strings, use of std::
+// and handling exceptions.
+#include <iomanip>
 #include <iostream>
 #include <list>
 #include <stdexcept>
@@ -88,8 +90,7 @@ int main() {
     } else {
         // Calling CalcAverage() function to display the average of the marks.
         average = CalcAverage(listOfMarks);
-        std::cout <<
-        "The average of your marks entered is: "
-        << average << "%";
+        std::cout << "The average of your marks entered is: "
+        << std::fixed << std::setprecision(2) << average << "%";
         }
     }
