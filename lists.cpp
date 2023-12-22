@@ -6,87 +6,90 @@
 // It uses a loop to get marks and will stop once the user enters - 1.
 // Then it will calculate / display their average.
 
-// Using C++ libraries to use time-related functions,
-// math calculations, use of std::, input/outputs,
-// using lists and strings. 
-#include <time.h>
-
-#include <cmath>
-#include <iomanip>
+// Using C++ libraries to allow for input/outputs,
+// using lists, strings and handling exceptions.
 #include <iostream>
 #include <list>
+#include <stdexcept>
 #include <string>
 
-// Template declaration that specifies the
-// maximum size of the array.
-template <size_t N>
-int CalcAverage(std::list<int> listOfMarks) {
-    // Declaring and initializing variables.
-    int sum;
-    int aNumber;
-    float average;
+// Function to calculate the average of a list of integers
+float CalcAverage(const std::list<int>& listOfMarks) {
+    // Initializing sum to 0.
+    float sum = 0;
 
-    // Check to see if 0 was entered,
-    // if it was then return -1 to function.
-    if (listOfMarks.size() == 0) {
-        return -1;
-    } else {
-        // Using a for loop to calculate average.
-        for (aNumber : listOfMarks) {
-            sum = sum + aNumber;
-        }
-        average = sum / listOfMarks.size();
+    // Using a for loop to calculate average.
+    for (int mark : listOfMarks) {
+        sum += mark;
     }
+
+    // Calculating the average.
+    float average = sum / listOfMarks.size();
+
+    // Returning the average to the function.
     return average;
 }
 
 int main() {
+    // Declaring list for user's marks
+    std::list<int> listOfMarks;
+
     // Declaring variables.
-    int counter;
-    std::string markAsString;
+    float userMarkFloat;
     float average;
+    std::string userMarksString;
 
     // Explaining my program to the user.
-    std::cout << "Welcome to my average calculator program.";
-    std::cout << "Please enter in your marks(between 0 - 100) and enter ";
-    std::cout << "- 1 to exist. I will calculate your average based on";
-    std::cout << "your mark inputs.";
+    std::cout <<
+    "Welcome to my average calculator program.";
+    std::cout <<
+    " Please enter in your marks(between 0 - 100) and enter - 1 to exist.";
+    std::cout <<
+    "I will calculate your average based on your mark inputs.";
 
-        // Declaring list for user's marks.
-        std::list<int>
-            listOfUserMarks;
+    // Using a while to catch any errors in the lo
+    while (true) {
+        // Getting user input(marks) as string.
+        std::cout <<
+        "\nEnter a mark between 0 and 100 (use negative to stop): ";
+        std::cin >> userMarksString;
 
-    // Using a for loop to repeat this part of the program.
-    for (counter = 0; counter < 0 || counter > 100; counter++) {
-        // Getting user input as a string.
-        std::cout << "Enter a mark: ";
-        std::cin >> markAsString;
-
-        // Using a try catch to catch any invalid inputs.
+        // Using try catch to catch any errors.
         try {
-            // Converting user input into a integer.
-            float markAsFloat = std::stof(markAsString);
+            // Converting user input from a string to a float.
+            userMarkFloat = std::stoi(userMarksString);
 
-            // Checking if the user inputted -1.
-            if (markAsFloat == -1) {
-                // Loop will end using a break statement
-                // and the user's average will be calculated.
-                average = CalcAverage(listOfUserMarks);
+            // Using if statement to check if the
+            // entered mark is greater than 100.
+            if (userMarkFloat > 100) {
+                // Display error message stating
+                // that their mark must be below 100.
+                std::cout <<
+                "Your mark cannot be greater than 100.";
+                // Else if their mark is less than 0.
+            } else if (userMarkFloat < 0) {
+                // When input is equal is a negative, break loop.
                 break;
+                // Else add the mark to the list, using
+                // push_back() function.
+            } else {
+                listOfMarks.push_back(userMarkFloat);
             }
-            // Appending the inputted marks to the list,
-            // using the push_back function.
-            listOfUserMarks.push_back(markAsFloat);
-
-        // Catching any invalid inputs.
-        } catch (std::invalid_argument) {
-            std::cout << "Invalid mark.";
-            // Using a continue statement to
-            // continue asking for the user's marks.
-            continue;
+        // Catching any errors.
+        } catch (std::exception) {
+            std::cout << "Invalid mark";
         }
-        // Displaying the average of the user's marks.
-        std::cout << "The average of your marks entered is"
-                  << std::fixed << std::setprecision(2) << average;
+    }
+
+    // Using if statement to check if the user entered a mark.
+    if (listOfMarks.size() == 0) {
+        std::cout << "Please enter a number.";
+    // Using else because otherwise they did enter a mark.
+    } else {
+        // Calling CalcAverage() function to display the average of the marks.
+        average = CalcAverage(listOfMarks);
+        std::cout <<
+        "The average of your marks entered is: "
+        << average << "%";
     }
 }
